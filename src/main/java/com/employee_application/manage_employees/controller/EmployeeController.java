@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,13 +21,23 @@ import com.employee_application.manage_employees.model.Employee;
 import com.employee_application.manage_employees.model.Project;
 import com.employee_application.manage_employees.service.EmployeeService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
-
+ 
+    // Get CSRF token 
+    // Synchronizer pattern method
+    @GetMapping("/token")
+    public ResponseEntity<CsrfToken> getCsrfToken(HttpServletRequest request){
+    	CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+    	return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+    
     // Employee CRUD Operations
     
     @PostMapping
