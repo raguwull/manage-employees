@@ -26,7 +26,7 @@ import lombok.Setter;
 public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="project_id")
+	@Column(name="PROJECT_ID")
 	private long id;
 	
 	@Column(unique=true)
@@ -68,7 +68,5 @@ public class Project {
 	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
 	}
-	
-	
 }
  

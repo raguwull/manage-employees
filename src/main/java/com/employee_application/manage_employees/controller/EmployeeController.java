@@ -29,9 +29,8 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
- 
+    
     // Get CSRF token 
-    // Synchronizer pattern method
     @GetMapping("/token")
     public ResponseEntity<CsrfToken> getCsrfToken(HttpServletRequest request){
     	CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
@@ -39,15 +38,10 @@ public class EmployeeController {
     }
     
     // Employee CRUD Operations
-    
+     
     @PostMapping
-    public ResponseEntity<List<Employee>> saveEmployees(@RequestBody List<Employee> employees) {
-        List<Employee> savedEmployees = employeeService.saveEmployees(employees);
-        return new ResponseEntity<>(savedEmployees, HttpStatus.CREATED);
-    }
-    
-    @PostMapping("/{id}")
-    public ResponseEntity<Employee> saveEmployee(@PathVariable long id, @RequestBody Employee employee) {
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
+    	System.out.println("Employee : " +  employee);
         Employee savedEmployee = employeeService.saveEmployee(employee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
@@ -70,7 +64,7 @@ public class EmployeeController {
     	employeeService.deleteEmployeeById(id); 
     	return new ResponseEntity<>(foundEmployee, HttpStatus.OK);
     } 
-     
+    
     @PutMapping("/{id}")
     public ResponseEntity<Employee> putEmployeeById(@PathVariable long id, @RequestBody Employee employeeDetails) {
 		Employee updatedEmployee = employeeService.updateEmployee(id, employeeDetails);

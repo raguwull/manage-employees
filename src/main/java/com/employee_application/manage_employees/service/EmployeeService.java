@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.employee_application.manage_employees.exception.DuplicateProjectException;
@@ -21,13 +22,26 @@ public class EmployeeService {
     
     @Autowired 
     private ProjectRepository projectRepository;
+        
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+    
     
     public Employee saveEmployee(Employee employee) {
+    	List<Project> projects = employee.getProjects();
+        for (int i = 0; i < projects.size(); i++) {
+            Project project = projects.get(i);
+            Optional<Project> managedProject = projectRepository.findById(project.getId());
+            if (managedProject.isPresent()) {
+                projects.set(i, managedProject.get());
+            } else {
+                project = projectRepository.save(project);
+                projects.set(i, project);
+            }
+        }
+        employee.setProjects(projects);
+    	employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return employeeRepository.save(employee);
-    }
-
-    public List<Employee> saveEmployees(List<Employee> employees) {
-        return employeeRepository.saveAll(employees);
     }
 
     public List<Employee> findAllEmployees() {
@@ -51,7 +65,6 @@ public class EmployeeService {
         employee.setPosition(employeeDetails.getPosition());
         employee.setSalary(employeeDetails.getSalary());
         employee.setEmail(employeeDetails.getEmail());
-        employee.setPhoneNumber(employeeDetails.getPhoneNumber());
         employee.setEmployeeStatus(employeeDetails.getEmployeeStatus());
         return employeeRepository.save(employee);
     } 
@@ -78,9 +91,6 @@ public class EmployeeService {
         }
         if (employeeDetails.getEmail() != null) {
             employee.setEmail(employeeDetails.getEmail());
-        }
-        if (employeeDetails.getPhoneNumber() != 0) {
-            employee.setPhoneNumber(employeeDetails.getPhoneNumber());
         }
         if (employeeDetails.getEmployeeStatus() != null) {
             employee.setEmployeeStatus(employeeDetails.getEmployeeStatus());

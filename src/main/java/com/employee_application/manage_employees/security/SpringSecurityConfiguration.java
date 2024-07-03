@@ -1,4 +1,4 @@
- package com.employee_application.manage_employees.security;
+package com.employee_application.manage_employees.security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -17,19 +17,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringSecurityConfiguration {
 	
-	private static final String ROLE_USER = "USER";
-	private static final String ROLE_ADMIN = "USER";
-    private static final String ALLOWED_ORIGIN = "http://localhost:3000";
+//	@Autowired
+//	private EmployeeRepository employeeRepository;
+
+	private static final String ALLOWED_ORIGIN = "http://localhost:3000";
 
 	@SuppressWarnings("removal")
 	@Bean
-	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
-		
-		http.authorizeHttpRequests(
-				auth -> auth.anyRequest().authenticated()
-				);
-		http.sessionManagement(
-				session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.httpBasic(withDefaults()); 
 		http.csrf().disable();
 		http.headers().frameOptions().sameOrigin();
@@ -37,49 +34,39 @@ public class SpringSecurityConfiguration {
 	}
 	
 	// Allowing Resources from cross origins
-	
 	@SuppressWarnings("unused")
 	@Bean
-	public WebMvcConfigurer corsConfigurer(){
+	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			public void addCorsMapping(CorsRegistry registry) {
 				registry
-				.addMapping("/**")
-				.allowedMethods("*")
-				.allowedHeaders("*")
-				.allowedOrigins(ALLOWED_ORIGIN)
-				.allowCredentials(true);
+					.addMapping("/**")
+					.allowedMethods("*")
+					.allowedHeaders("*")
+					.allowedOrigins(ALLOWED_ORIGIN)
+					.allowCredentials(true);
 			}
 		};
 	}
 	 
-	// Hashing the user name and password of the users:
-	
+	// Hashing the user name and password of the users
 	@Bean
-	public UserDetailsService userDeailsService() {
-		var user = User
-				.withUsername("ragul")
-				.password("password")
-				.passwordEncoder(str -> MyPasswordEncoder().encode(str))
-				.roles(ROLE_USER)
-				.build();
+	public UserDetailsService userDetailsService() {
+		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+
+		manager.createUser(User
+			.withUsername("admin")
+			.password("password")
+			.passwordEncoder(str -> passwordEncoder().encode(str))
+			.roles("ADMIN") 
+			.build());
 		
-		var admin = User
-				.withUsername("admin")
-				.password("password")
-				.passwordEncoder(str -> MyPasswordEncoder().encode(str))
-				.roles(ROLE_ADMIN)
-				.build();
-		
-		return new InMemoryUserDetailsManager(user, admin);
+		return manager;
 	}
 	
-	// Creating a new Bean for hashing the password:
-	
+	// Creating a new Bean for hashing the password
 	@Bean 
-	public BCryptPasswordEncoder MyPasswordEncoder() {
+	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }
-
-
