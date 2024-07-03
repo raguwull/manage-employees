@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,8 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     
-    // Get CSRF token 
+    // Get CSRF token
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/token")
     public ResponseEntity<CsrfToken> getCsrfToken(HttpServletRequest request){
     	CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
