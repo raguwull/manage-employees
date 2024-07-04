@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.employee_application.manage_employees.exception.AuthenticationException;
 import com.employee_application.manage_employees.model.AuthenticationRequest;
 import com.employee_application.manage_employees.model.AuthenticationResponse;
+import com.employee_application.manage_employees.security.util.JwtUtil;
 
 @Controller
 public class AuthenticationController {
@@ -25,7 +26,7 @@ public class AuthenticationController {
 	private UserDetailsService userDetailsService;
 	
 	@Autowired 
-	private JwtToken jwtToken;
+	private JwtUtil jwtTokenUtil;
 	
 	
 	@PostMapping("/authenticate")
