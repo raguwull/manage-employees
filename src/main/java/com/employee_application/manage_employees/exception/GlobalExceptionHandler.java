@@ -26,4 +26,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
+	@ExceptionHandler(AuthenticationException.class)
+	public final ResponseEntity<ErrorDetails> handleAuthentication(AuthenticationException ex, WebRequest request){
+		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+	}
 }
