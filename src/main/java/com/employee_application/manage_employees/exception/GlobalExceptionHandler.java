@@ -32,4 +32,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
 	}
+	
+	@ExceptionHandler(TokenExpiredException.class)
+	public final ResponseEntity<ErrorDetails> handleTokenExpiration(TokenExpiredException ex, WebRequest request){
+		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+	} 
 }

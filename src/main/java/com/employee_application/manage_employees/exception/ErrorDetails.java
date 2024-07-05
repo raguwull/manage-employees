@@ -20,4 +20,8 @@ public class ErrorDetails {
 	public void setDetails(String details) {
 		this.details = details;
 	}
+	@Override
+	public String toString() {
+		return "ErrorDetails [message=" + message + ", details=" + details + "]";
+	}
 }

@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import com.employee_application.manage_employees.exception.DuplicateProjectException;
@@ -26,8 +29,21 @@ public class EmployeeService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     
+    @Autowired
+    private UserDetailsManager userDetailsManager;
     
     public Employee saveEmployee(Employee employee) {
+    	
+    	final String encodedPassword = passwordEncoder.encode(employee.getPassword());
+    	
+    	UserDetails newUser = User
+    							.withUsername(employee.getUsername())
+    							.password(encodedPassword)
+    							.roles(employee.getRole())
+    			                .build();
+    	
+    	userDetailsManager.createUser(newUser);
+
     	List<Project> projects = employee.getProjects();
         for (int i = 0; i < projects.size(); i++) {
             Project project = projects.get(i);
@@ -39,8 +55,9 @@ public class EmployeeService {
                 projects.set(i, project);
             }
         }
+        
         employee.setProjects(projects);
-    	employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+    	employee.setPassword(encodedPassword);
         return employeeRepository.save(employee);
     }
 

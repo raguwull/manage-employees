@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.employee_application.manage_employees.exception.AuthenticationException;
+import com.employee_application.manage_employees.exception.TokenExpiredException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -61,6 +64,13 @@ public class JwtUtil {
 	
 	public boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		if (!username.equals(userDetails.getUsername())) {
+			throw new AuthenticationException("Invalid user");
+		}
+		if (isTokenExpired(token)) {
+			throw new TokenExpiredException("Your JWT has expired");
+		}
+		return true;
+//		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 }

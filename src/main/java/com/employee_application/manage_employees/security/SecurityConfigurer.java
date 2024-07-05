@@ -37,6 +37,7 @@ public class SecurityConfigurer {
         http.authorizeHttpRequests()
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/authenticate").permitAll()
+            .requestMatchers("/hello").permitAll()
             .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -72,20 +73,12 @@ public class SecurityConfigurer {
                 .password(passwordEncoder().encode("password"))
                 .roles("ADMIN")
                 .build();
-
-        UserDetails user1 = User
-                .withUsername("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
-
+        
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
         if (!userDetailsManager.userExists(admin.getUsername())) {
             userDetailsManager.createUser(admin);
         }
-        if (!userDetailsManager.userExists(user1.getUsername())) {
-            userDetailsManager.createUser(user1);
-        }
+
         return userDetailsManager;
     }
 
