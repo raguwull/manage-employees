@@ -178,5 +178,13 @@ public class Employee{
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", name="
+				+ name + ", age=" + age + ", address=" + address + ", department=" + department + ", position="
+				+ position + ", salary=" + salary + ", email=" + email + ", dateOfJoining=" + dateOfJoining
+				+ ", employeeStatus=" + employeeStatus + ", projects=" + projects + "]";
+	}
     
 }

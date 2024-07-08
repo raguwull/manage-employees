@@ -8,6 +8,8 @@ public class AuthenticationRequest {
 		this.username = username;
 		this.password = password;
 	}
+	public AuthenticationRequest() {
+	}
 	public String getUsername() {
 		return username;
 	}

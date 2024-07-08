@@ -140,4 +140,9 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+	public Employee findEmployeeByUsername(String username) {
+		Employee employee = employeeRepository.findByUsername(username);
+		return employee;
+	}
+
 }

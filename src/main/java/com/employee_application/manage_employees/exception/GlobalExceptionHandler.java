@@ -31,6 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 	public final ResponseEntity<ErrorDetails> handleAuthentication(AuthenticationException ex, WebRequest request){
 		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+
 	}
 	
 	@ExceptionHandler(TokenExpiredException.class)
