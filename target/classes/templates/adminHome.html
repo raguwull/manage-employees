@@ -60,78 +60,169 @@
     <div class="container mt-4">
     
         <div class="row">
-        
+
+
+
+
         	<div class="col-md-3">
         	
-	            <div class="col-md-12">
-	                <div class="card shadow-lg">
-	                    <div class="navigation-header card-header text-white">
-	                        Navigation
-	                    </div>
-	                    <div class="list-group list-group-flush">
-	                        <a th:href="@{/admin/home}" class="list-group-item list-group-item-action">Home</a>
-	                        <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">Manage Users</a>
-	                        <a th:href="@{/admin/settings}" class="list-group-item list-group-item-action">Settings</a>
-	                    </div>
-	                </div>
-	            </div>
-	           
-	            
-	            <div class="col-md-12 mt-4">
-	                <div class="card shadow-lg profile-card p-3">
-<!-- 	                    <img class="profile-img mb-3" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile Picture">
- -->	                <h3 th:text="${user.name}"></h3>
-	                    <p class="card-text">Role: <span th:text="${user.role}"></span></p>
-	                    <p class="card-text">Email: <span th:text="${user.email}"></span></p>
-	                    <p class="card-text">Joined: <span th:text="${user.dateOfJoining}"></span></p>
-	                    <p class="card-text">Dept: <span th:text="${user.dept}"></span></p>
-	                    
-	                </div>
-	            </div>
-	            
-	            
+        	
+		            <div class="col-md-12">
+		                <div class="card shadow-lg">
+		                    <div class="navigation-header card-header text-white">
+		                        Navigation
+		                    </div>
+		                    <div class="list-group list-group-flush">
+		                        <a th:href="@{/admin/home}" class="list-group-item list-group-item-action">Home</a>
+		                        <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">Manage Users</a>
+		                        <a th:href="@{/admin/projects}" class="list-group-item list-group-item-action">Manage Projects</a>
+		                        <a th:href="@{/admin/settings}" class="list-group-item list-group-item-action">Settings</a>
+		                    </div>
+		                </div>
+		            </div>
+		            
+		            
+		            <div class="col-md-12 mt-4">
+		                <div class="card shadow-lg profile-card p-3">
+	<!-- 	                    <img class="profile-img mb-3" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile Picture">
+	 -->	                <h3 th:text="${user.name}"></h3>
+		                    <p class="card-text">Role: <span th:text="${user.role}"></span></p>
+		                    <p class="card-text">Email: <span th:text="${user.email}"></span></p>
+		                    <p class="card-text">Joined: <span th:text="${user.dateOfJoining}"></span></p>
+		                    <p class="card-text">Dept: <span th:text="${user.dept}"></span></p>
+		                    
+		                </div>
+		            </div>
 	            
          	</div>
             
-            <div class="col-md-9">
-                <div class="card shadow-lg">
-                    <div class="dashboard-header card-header text-white">
-                        Dashboard
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Welcome, <span sec:authentication="name"></span> </h5>
-                      	<p class="card-text">Here is an overview of your application.</p>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Total Users</h5>
-                                        <p class="card-text" th:text="${totalUsers}">100</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Pending Requests</h5>
-                                        <p class="card-text" th:text="${pendingRequests}">20</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">System Alerts</h5>
-                                        <p class="card-text" th:text="${systemAlerts}">5</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+            
+            <div class="row col-md-9">
+		            <div class="col-md-12">
+		                <div class="card shadow-lg">
+		                    <div class="dashboard-header card-header text-white">
+		                        Dashboard
+		                    </div>
+		                    <div class="card-body">
+		                        <h5 class="card-title">Welcome, <span sec:authentication="name"></span> </h5>
+		                      	<p class="card-text">Here is an overview of your application.</p>
+		                        <div class="row">
+		                            <div class="col-md-4">
+		                                <div class="card mb-3">
+		                                    <div class="card-body">
+		                                        <h5 class="card-title">Total Users</h5>
+		                                        <h1 class="card-text" th:text="${totalUsers}">100</h1>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-md-4">
+		                                <div class="card mb-3">
+		                                    <div class="card-body">
+		                                        <h5 class="card-title">Pending Requests</h5>
+		                                        <h1 class="card-text" th:text="${pendingRequests}">20</h1>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-md-4">
+		                                <div class="card mb-3">
+		                                    <div class="card-body">
+		                                        <h5 class="card-title">System Alerts</h5>
+		                                        <h1 class="card-text" th:text="${systemAlerts}">5</h1>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            
+		            
+		            
+		            
+		            <div class="col-md-6 mt-4">
+		                       <div id="carouselExampleIndicators" class="carousel slide shadow-lg" data-bs-ride="carousel" data-bs-interval='2000'>
+                           <div class="carousel-indicators">
+                               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                           </div>
+                           <div class="carousel-inner">
+                               <div class="carousel-item active">
+                                   <img src="https://media.licdn.com/dms/image/D5622AQGgsTHb6hFVFg/feedshare-shrink_800/0/1704461796571?e=2147483647&v=beta&t=4dy1J00Xcgz1DosZq84GEICooE8ph9Ar4rN2iPO3lwI" class="d-block w-100" alt="First slide">
+                               </div>
+                               <div class="carousel-item">
+                                   <img src="https://media.licdn.com/dms/image/D5622AQGkKREuQOuy4Q/feedshare-shrink_800/0/1682330917279?e=2147483647&v=beta&t=9PHG_V5OwaJqMbkMKa0PabPnzFIvuY6WmH06rRaVZ5c" class="d-block w-100" alt="Second slide">
+                               </div>
+                               <div class="carousel-item">
+                                   <img src="https://media.licdn.com/dms/image/D4D22AQHMoxgJkUMLwg/feedshare-shrink_800/0/1692800850329?e=2147483647&v=beta&t=SlmA9JLeRdDG9TgR9JkJnr6MA52nNb6BIhqO2ZVIW04" class="d-block w-100" alt="Third slide">
+                               </div>
+                           </div>
+                           <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                               <span class="visually-hidden">Previous</span>
+                           </button>
+                           <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                               <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                               <span class="visually-hidden">Next</span>
+                           </button>
+                       </div>
+                   </div>
+		                    
+		                    
+		                    
+		          	<div class="col-md-6 mt-4">
+				        <div class="bg-white rounded shadow-lg p-2">
+				            <canvas id="projectsChart"></canvas>
+				        </div>
+				    </div>
+                    
+                    
+              	</div>      
+                    
+            	
+            
+            
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGFGLm/07+eM5T6mNfE5R5yn5TY5P4Nae8W00/uHVE6n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('projectsChart').getContext('2d');
+        const pendingProjects = /*[[${pendingProjects}]]*/ 0; 
+        const finishedProjects = /*[[${finishedProjects}]]*/ 0;
+
+        const projectsChart = new Chart(ctx, {
+            type: 'bar', 
+            data: {
+                labels: ['Pending Projects', 'Finished Projects'],
+                datasets: [{
+                    label: 'No of Projects',
+                    data: [pendingProjects, finishedProjects],
+                    backgroundColor: [
+                        'rgba(15, 66, 117)', 
+                        'rgba(15, 84, 35)'  
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+    /*]]>*/
+</script>
+    
 </body>
 </html>

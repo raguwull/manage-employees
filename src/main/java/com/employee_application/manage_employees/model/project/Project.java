@@ -36,7 +36,7 @@ public class Project {
 	private String status;
 
 	@JsonIgnore
-	@ManyToMany(mappedBy="projects", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "projects", fetch = FetchType.LAZY)
 	private List<MyUser> users;
 	
 	

@@ -42,12 +42,12 @@ public class ApplicationStartup {
         calendar.set(2020, Calendar.MAY, 1);
         Date doj3 = calendar.getTime();
 
-        MyUser admin = new MyUser("admin", "admin123", "ADMIN", "Admin User", "Technology", "System Admin",
-                "123 Admin St", "admin@example.com", 1234567890L, dob1, doj1, 90000.0, "CEO", "Male", "Married",
+        MyUser admin = new MyUser("tvscs", "tvscs", "ADMIN", "TVS Credit Services", "Technology", "System Admin",
+                "123 Admin St", "admin@tvscredit.com", 1234567890L, dob1, doj1, 90000.0, "CEO", "Male", "Married",
                 "9876543210", "American", "Active");
 
-        MyUser user = new MyUser("user", "user123", "USER", "User One", "Finance", "Accountant",
-                "456 User St", "user@example.com", 2234567890L, dob2, doj2, 60000.0, "Finance Manager", "Female",
+        MyUser user = new MyUser("ragul", "ragul", "USER", "Ragul Balasundaram", "IT", "Intern",
+                "456 User St", "ragul@tvscredit.com", 2234567890L, dob2, doj2, 90000000.0, "Intern", "Male",
                 "Unmarried", "8876543210", "Canadian", "Active");
 
         MyUser manager = new MyUser("manager", "manager123", "USER", "Manager One", "Operations",
@@ -85,7 +85,7 @@ public class ApplicationStartup {
     	Project project3 = createProject(
     	    "Scalable Cloud Infrastructure for Data Analytics",
     	    "Design and deploy a scalable cloud infrastructure for data analytics.",
-    	    "Pending",
+    	    "Finished",
     	    admin, user, manager);
 
     	Project project4 = createProject(
@@ -97,7 +97,7 @@ public class ApplicationStartup {
     	Project project5 = createProject(
     	    "Personalized E-commerce Platform",
     	    "Develop an e-commerce platform with personalized shopping recommendations.",
-    	    "Pending",
+    	    "Finished",
     	    rohith, jane);
 
     	Project project6 = createProject(
@@ -121,7 +121,7 @@ public class ApplicationStartup {
     	Project project9 = createProject(
     	    "Virtual Reality Training Simulator for Emergency Response",
     	    "Build an interactive virtual reality training simulator for emergency response teams.",
-    	    "Pending",
+    	    "Finished",
     	    admin, rohith);
 
     	Project project10 = createProject(

@@ -4,18 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.employee_application.manage_employees.exception.ResourceNotFoundException;
+import com.employee_application.manage_employees.model.myuser.MyUser;
 import com.employee_application.manage_employees.model.project.Project;
 import com.employee_application.manage_employees.repository.ProjectRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
-
+    
+//    @Autowired
+//    private UserRepository userRepository;
+   
     public List<Project> getProjects(String username) {
         return projectRepository.findByUser(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find projects for user: " + username));
@@ -35,4 +42,33 @@ public class ProjectService {
     public void saveProject(Project project) {
     	projectRepository.save(project);
     }
+
+	public Project getProjectById(long id) {
+		return projectRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Cannot find Project"));
+	}
+	
+	public Project getProjectByName(String name) {
+		return projectRepository.findByName(name).orElseThrow(() -> new UsernameNotFoundException("Cannot find Project"));
+	}
+
+
+	public List<Project> getAllProjects() {
+		return projectRepository.findAll();
+	}
+	
+	@Transactional
+    public void deleteProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id " + projectId));
+
+        for (MyUser user : project.getUsers()) {
+            user.getProjects().remove(project);
+        }
+
+        projectRepository.deleteById(projectId);
+    }
+
+	public List<Project> getProjectByStatus(String status) {
+		return projectRepository.findAllByStatus(status);
+	}
 }
