@@ -1,97 +1,224 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>	
+<head>
     <title>User Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         .profile-card {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            background-color: white;
         }
         .profile-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 100%;
+            height: auto;
+        }
+        
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 4;
+            top: 0;
+            background: linear-gradient(90deg, #0f4275 0%, #0f5422 100%);
+        }
+        .container {
+            padding-top: 70px;
+        }
+        .carousel-item img {
+            height: 240px;
             object-fit: cover;
         }
+        .dashboard {
+            height: 300px;
+        }
+        .selected-button{
+			background: linear-gradient(90deg, #0f4275 0%, #0f5422 100%);
+        }
+        .dashboard-header{
+        	background-color: #0f4275;
+        }
+        .btn{
+        	background-color: #0f4275;
+        }
+        .btn:hover{
+        	background-color: #135291;
+        }
+        .proj-button, .buttons{
+        	color: black;
+        	border: none;
+        }
+        div{
+        	border: none;
+        }
+        
     </style>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<body class="bg-light" th:object="${user}">
+
+    <nav class="navbar navbar-expand-lg navbar-light shadow-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">User Dashboard</a>
+            <a class="navbar-brand text-white" th:href="@{/user/home}">User Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                        <a class="nav-link text-white" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+
     <div class="container mt-4">
         <div class="row">
-            <!-- Profile Card -->
             <div class="col-md-3">
-                <div class="card shadow-sm profile-card">
+                <div class="card shadow-lg profile-card">
                     <img class="profile-img mb-3" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile Picture">
-                    <h5 class="card-title">John Doe</h5>
-                    <p class="card-text">User Role: User</p>
-                    <p class="card-text">Email: john.doe@example.com</p>
-                    <p class="card-text">Joined: January 1, 2023</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-					   Edit Profile
-					</button>
+                    <h3 th:text="${user.name}"></h3>
+                    <p class="card-text">Role: <span th:text="${user.role}"></span></p>
+                    <p class="card-text">Email: <span th:text="${user.email}"></span></p>
+                    <p class="card-text">Joined: <span th:text="${user.dateOfJoining}"></span></p>
+                    <p class="card-text">Dept: <span th:text="${user.dept}"></span></p>
+                    <a href="/user/settings" type="button" class="btn btn-primary m-3" data-toggle="modal" data-target="#exampleModalCenter">
+                        Edit Profile
+                    </a>
                 </div>
             </div>
-            <!-- Main Content -->
+
             <div class="col-md-9">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        Dashboard
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Welcome, User</h5>
-                        <p class="card-text">Here is an overview of your activities.</p>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card text-white bg-info mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Your Posts</h5>
-                                        <p class="card-text" th:text="${userPosts}">50</p>
-                                    </div>
-                                </div>
+                <div class="row">
+                    <div class="dashboard col-md-6">
+                        <div class="dashboard-card card shadow-lg">
+                            <div class="dashboard-header card-header text-white">
+                                Dashboard
                             </div>
-                            <div class="col-md-4">
-                                <div class="card text-white bg-warning mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Pending Tasks</h5>
-                                        <p class="card-text" th:text="${pendingTasks}">10</p>
+                            <div class="card-body">
+                                <h5 class="card-title">Welcome, <span th:text="${user.name}"></span></h5>
+                                <p class="card-text">Here is an overview of your activities.</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <button class="all-projects proj-button card-body" onclick="toggleButton(this, 'All')">
+                                                <h5 class="card-title">Your Projects</h5>
+                                                <p class="card-text" th:text="${totalProjects}">100</p>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-white bg-success mb-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Completed Tasks</h5>
-                                        <p class="card-text" th:text="${completedTasks}">30</p>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <button class="pending-projects proj-button card-body" onclick="toggleButton(this, 'Pending')">
+                                                <h5 class="card-title">Pending Projects</h5>
+                                                <p class="card-text" th:text="${pendingProjects}">20</p>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <button class="finished-projects proj-button card-body" onclick="toggleButton(this, 'Finished')">
+                                                <h5 class="card-title">Finished Projects</h5>
+                                                <p class="card-text" th:text="${completedProjects}">5</p>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Additional user content goes here -->
+                    </div>
+
+                    <div class="col-md-6">
+                       <div id="carouselExampleIndicators" class="carousel slide shadow-lg" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://media.licdn.com/dms/image/D5622AQGgsTHb6hFVFg/feedshare-shrink_800/0/1704461796571?e=2147483647&v=beta&t=4dy1J00Xcgz1DosZq84GEICooE8ph9Ar4rN2iPO3lwI" class="d-block w-100" alt="First slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://media.licdn.com/dms/image/D5622AQGkKREuQOuy4Q/feedshare-shrink_800/0/1682330917279?e=2147483647&v=beta&t=9PHG_V5OwaJqMbkMKa0PabPnzFIvuY6WmH06rRaVZ5c" class="d-block w-100" alt="Second slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://media.licdn.com/dms/image/D4D22AQHMoxgJkUMLwg/feedshare-shrink_800/0/1692800850329?e=2147483647&v=beta&t=SlmA9JLeRdDG9TgR9JkJnr6MA52nNb6BIhqO2ZVIW04" class="d-block w-100" alt="Third slide">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <table class="table table-striped shadow-lg rounded">
+                            <thead>
+                                <tr class="d-none project-header" id="project-header">
+                                    <th>ID</th>
+                                    <th>Project name</th>
+                                    <th>Description</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectTableBody">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   
-    
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function toggleButton(button, status) {
+            
+            
+            if (status !== '') {
+                try {
+                    const response = await fetch(`/user/projects/${status}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+
+                    document.getElementById("project-header").classList.remove("d-none");
+                    
+                    const projects = await response.json();
+                    const projectTableBody = document.getElementById('projectTableBody');
+                    projectTableBody.innerHTML = '';
+
+                    projects.forEach(project => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${project.id}</td>
+                            <td>${project.name}</td>
+                            <td>${project.description}</td>
+                            <td>${project.duration} months</td>
+                            <td>${project.status}</td>
+                        `;
+                        projectTableBody.appendChild(row);
+                    });
+                } catch (error) {
+                    console.error('Error fetching projects:', error);
+                }
+            }
+        }
+    </script>
+</body>
 </html>
+
+ 

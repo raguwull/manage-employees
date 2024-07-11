@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
-import com.employee_application.manage_employees.security.util.JwtUtil;
+import com.employee_application.manage_employees.security.jwt.JwtUtil;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,7 +30,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 redirectURL = "/admin/home";
                 break;
             } else if (authority.getAuthority().equals("ROLE_USER")) {
-                redirectURL = "/user/home";
+                redirectURL = "/user/home";                
                 break;
             }
         }   
