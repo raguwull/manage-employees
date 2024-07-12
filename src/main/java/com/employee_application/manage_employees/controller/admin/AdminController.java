@@ -36,6 +36,7 @@ public class AdminController {
 
     @GetMapping("/home")
     public String adminHome(Model model) {
+    	
     	MyUser user = userService.currentUser();
     	
     	int pendingProjects = projectService.getProjectByStatus("Pending").size();
