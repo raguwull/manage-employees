@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.employee_application.manage_employees.exception.ResourceNotFoundException;
@@ -44,11 +45,11 @@ public class ProjectService {
     }
 
 	public Project getProjectById(long id) {
-		return projectRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Cannot find Project"));
+		return projectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cannot find Project"));
 	}
 	
 	public Project getProjectByName(String name) {
-		return projectRepository.findByName(name).orElseThrow(() -> new UsernameNotFoundException("Cannot find Project"));
+		return projectRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Cannot find Project"));
 	}
 
 
@@ -71,4 +72,19 @@ public class ProjectService {
 	public List<Project> getProjectByStatus(String status) {
 		return projectRepository.findAllByStatus(status);
 	}
+	
+	public Page<Project> getPaginatedProjects(Pageable pageable) {
+	    return projectRepository.findAll(pageable);
+	}
+
+	public List<Project> getProjectByNameContainingIgnoreCase(String name) {
+	    List<Project> projects = projectRepository.findByNameContainingIgnoreCase(name);
+	    if (projects.size() == 0) {
+	        throw new ResourceNotFoundException("Cannot find project");
+	    }
+	    return projects;
+	}
+
+
+
 }

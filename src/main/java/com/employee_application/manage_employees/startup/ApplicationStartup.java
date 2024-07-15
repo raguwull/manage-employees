@@ -3,14 +3,18 @@ package com.employee_application.manage_employees.startup;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import com.employee_application.manage_employees.model.finance.Finance;
 import com.employee_application.manage_employees.model.myuser.MyUser;
 import com.employee_application.manage_employees.model.project.Project;
+import com.employee_application.manage_employees.service.excel.ExcelService;
+import com.employee_application.manage_employees.service.finance.FinanceService;
 import com.employee_application.manage_employees.service.myuser.UserService;
 import com.employee_application.manage_employees.service.project.ProjectService;
 
@@ -22,6 +26,12 @@ public class ApplicationStartup {
 
     @Autowired
     private ProjectService projectService;
+    
+    @Autowired 
+    private FinanceService financeService;
+    
+    @Autowired 
+    private ExcelService excelService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initializeUsersAndProjects() {
@@ -169,6 +179,30 @@ public class ApplicationStartup {
         userService.saveUser(manager);
         userService.saveUser(rohith);
         userService.saveUser(jane);
+        
+        
+        // Finance
+//        Finance finance1 = createFinance(project1, dob1, "Office Supplies", "Purchased office stationery", 150.75, "Office Depot", "Credit Card", 1001, "Approved");
+//        Finance finance2 = createFinance(project2, dob2, "Travel", "Team travel to client site", 1200.00, "Travel Agency", "Bank Transfer", 1002, "Pending");
+//        Finance finance3 = createFinance(project3, dob3, "Software Licenses", "Annual subscription for project management software", 3500.00, "Software Vendor", "Credit Card", 1003, "Approved");
+//        
+//        
+//        financeService.saveFinance(finance1);
+//        financeService.saveFinance(finance2);
+//        financeService.saveFinance(finance3);
+//        
+//        
+//        List<Finance> financeList = Arrays.asList(finance1, finance2, finance3);
+
+//        excelService.initialiseSheet();
+        
+        List<Finance> financeList = excelService.getAllFinaceRecords();
+        financeService.saveFinances(financeList);
+//        List<Finance> newList = excelService.getAllFinaceRecords();
+//        for (Finance f: newList) {
+//        	System.out.println(f.getDescription());
+//        }
+        
     }
 
     private Project createProject(String name, String description, String status, MyUser... users) {
@@ -180,5 +214,19 @@ public class ApplicationStartup {
         project.setStatus(status);
         project.setUsers(Arrays.asList(users));
         return project;
+    }
+    
+    private Finance createFinance(Project project, Date date, String expenseType, String description, double amount, String paidTo, String paymentMethod, long invoiceNumber, String approvalStatus) {
+        Finance finance = new Finance();
+        finance.setProject(project);
+        finance.setDate(date);
+        finance.setExpenseType(expenseType);
+        finance.setDescription(description);
+        finance.setAmount(amount);
+        finance.setPaidTo(paidTo);
+        finance.setPaymentMethod(paymentMethod);
+        finance.setInvoiceNumber(invoiceNumber);
+        finance.setApprovalStatus(approvalStatus);
+        return finance;
     }
 }

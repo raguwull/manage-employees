@@ -17,5 +17,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long>{
     Optional<List<Project>> findByUser(@Param("username") String username);
 
 	List<Project> findAllByStatus(String status);
+
+	List<Project> findByNameContainingIgnoreCase(String name);
 	
 }

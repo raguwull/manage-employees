@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.employee_application.manage_employees.exception.ResourceNotFoundException;
+import com.employee_application.manage_employees.model.finance.Finance;
 import com.employee_application.manage_employees.model.myuser.MyUser;
 import com.employee_application.manage_employees.model.project.Project;
 import com.employee_application.manage_employees.service.dashboard.DashboardService;
+import com.employee_application.manage_employees.service.excel.ExcelService;
+import com.employee_application.manage_employees.service.finance.FinanceService;
 import com.employee_application.manage_employees.service.myuser.UserService;
 import com.employee_application.manage_employees.service.project.ProjectService;
 
@@ -33,7 +40,13 @@ public class AdminController {
 	
 	@Autowired
 	private ProjectService projectService;
-
+	
+	@Autowired
+	private ExcelService excelService;
+	
+	@Autowired
+	private FinanceService financeService;
+	
     @GetMapping("/home")
     public String adminHome(Model model) {
     	
@@ -72,24 +85,73 @@ public class AdminController {
     }
 
 	@GetMapping("/projects")
-    public String manageProjects(@RequestParam(value = "searchname", required = false) String searchname, Model model) {
-        List<Project> projects = new ArrayList<>();
-        try {
-        	if (searchname != null && !searchname.isEmpty()) {
-        		projects.add(projectService.getProjectByName(searchname));
-            } else {
-            	projects = projectService.getAllProjects();
-            }
-            model.addAttribute("projects", projects);
-            return "manageProjects"; 
-            
-        }catch(UsernameNotFoundException ex) {
-        	model.addAttribute("user", userService.currentUser());
-        	model.addAttribute("errorMessage", "Cannot find project");
-        	return "manageProjects";
-        }
-        
-    }
+	public String manageProjects(
+	        @RequestParam(value = "searchname", required = false) String searchname, 
+	        @RequestParam(defaultValue = "0") int page, 
+	        Model model) {
+	    
+	    int pageSize = 6;
+	    Page<Project> projectPage;
+	    	    
+	    try {
+	        if (searchname != null && !searchname.isEmpty()) {
+	            List<Project> filteredProjects = projectService.getProjectByNameContainingIgnoreCase(searchname);
+	            int start = Math.min((int) PageRequest.of(page, pageSize).getOffset(), filteredProjects.size());
+	            int end = Math.min((start + PageRequest.of(page, pageSize).getPageSize()), filteredProjects.size());
+	            projectPage = new PageImpl<>(filteredProjects.subList(start, end), PageRequest.of(page, pageSize), filteredProjects.size());
+	        } else {
+	            projectPage = projectService.getPaginatedProjects(PageRequest.of(page, pageSize));
+	        }
+	        model.addAttribute("projects", projectPage.getContent());
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", projectPage.getTotalPages());
+	        return "manageProjects"; 
+	        
+	    } catch (ResourceNotFoundException ex) {
+	        model.addAttribute("user", userService.currentUser());
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", 0);
+	        model.addAttribute("errorMessage", "Cannot find project");
+	        return "manageProjects";
+	    } catch (Exception ex) {
+	        model.addAttribute("user", userService.currentUser());
+	        model.addAttribute("currentPage", page);
+	        model.addAttribute("totalPages", 0);
+	        model.addAttribute("errorMessage", "Search failed");
+	        return "manageProjects";
+	    }
+	}
+
+	
+	@GetMapping("/finance")
+	public String getFinancePage(Model model) {
+		model.addAttribute("user", userService.currentUser());		
+		model.addAttribute("financeRecords", excelService.getAllFinaceRecords());
+		return "manageFinance";
+	}
+	
+	@GetMapping("/finance/create")
+	public String getFinanceCreatePage(Model model) {
+		model.addAttribute("user", userService.currentUser());		
+		model.addAttribute("finance", new Finance());	
+		model.addAttribute("projects", projectService.getAllProjects());
+		return "addFinance";
+	}
+	
+	@PostMapping("/finance/create")
+	public String createFinanceRecord(@ModelAttribute("finance") Finance finance, Model model) {
+		financeService.saveFinance(finance);
+		excelService.addFinanceRecord(finance);
+		model.addAttribute("user", userService.currentUser());		
+		return "redirect:/admin/finance";
+	}
+	
+	@GetMapping("/fianance/delete/{id}")
+	public String deleteFinance(@PathVariable long id, Model model) {
+		financeService.deleteFinanceById(id);
+		excelService.deleteFinanceRecord(id);
+		return "redirect:/admin/finance";
+	}
 	
 	@GetMapping("/edituser/{editname}")
     public String editUser(@PathVariable String editname, Model model) {

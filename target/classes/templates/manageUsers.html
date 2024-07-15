@@ -14,6 +14,11 @@
         .container {
             padding-top: 70px;
         }
+        .table th {
+        	font-weight: normal; 
+        	background-color: #0f4275;
+        	color: white;
+        }
 	</style>
 </head>
 <body class="bg-light">
@@ -33,8 +38,14 @@
         </div>
     </nav>
     <div class="container mt-4">
+    	<nav aria-label="breadcrumb">
+		  <ol class="breadcrumb">
+		    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+		    <li class="breadcrumb-item active" aria-current="page">Users</li>
+		  </ol>
+		</nav>
         <h1 class="mb-3">Manage Users</h1>
-        <form th:action="@{/admin/users}" method="get" class="d-flex mb-4">
+        <form th:action="@{/admin/users}" method="get" class="d-flex mb-4 col-md-4">
             <input class="form-control" type="search" placeholder="Search by username" name="searchname">
             <button class="btn btn-outline-primary mx-2" type="submit">Search</button>
         </form>
