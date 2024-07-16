@@ -122,7 +122,6 @@ public class AdminController {
 	    }
 	}
 
-	
 	@GetMapping("/finance")
 	public String getFinancePage(Model model) {
 		model.addAttribute("user", userService.currentUser());		
@@ -165,7 +164,6 @@ public class AdminController {
         model.addAttribute("user", userService.currentUser());
         return "settings-page";
     }
-	 
 
 	@GetMapping("/settings")
     public String editMyProfile(Model model) {
@@ -206,4 +204,5 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("message", "User deleted successfully!");
         return "redirect:/admin/projects";
     }
+
 }
